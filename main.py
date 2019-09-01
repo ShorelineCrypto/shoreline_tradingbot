@@ -51,15 +51,15 @@ def main(args):
     if osname == 'Linux':
        tmpFile1 = os.path.join(os.path.expanduser("~"), '.shorelinetradingbot',  args.conf)
        tmpFile2 = os.path.join(os.path.dirname(
-           utils.getPathOfThisFile()), 'shorelinetradingbot.conf')
+           utils.getPathOfThisFile()), args.conf)
     elif osname == 'Windows':
        tmpFile1 = os.path.join(os.path.expandvars("%userprofile%"), 'AppData\Roaming\shorelinetradingbot',args.conf)
        tmpFile2 = os.path.join(os.path.dirname(
-           utils.getPathOfThisFile()), 'shorelinetradingbot.conf')
+           utils.getPathOfThisFile()), args.conf)
     elif osname == 'Darwin':
        tmpFile1 = os.path.join(os.path.expanduser("~"), 'Library/Application Support/shorelinetradingbot',  args.conf)
        tmpFile2 = os.path.join(os.path.dirname(
-           utils.getPathOfThisFile()), 'shorelinetradingbot.conf')
+           utils.getPathOfThisFile()), args.conf)
     else:
         assert False, "Error: unsupported operating system: {}".format(osname)
 
