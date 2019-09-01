@@ -49,15 +49,15 @@ def main(args):
     osname = platform.system()
     print "Your Computer Platform is: {}".format(osname)
     if osname == 'Linux':
-       tmpFile1 = os.path.join(os.path.expanduser("~"), '.shorelinetradingbot',  'shorelinetradingbot.conf')
+       tmpFile1 = os.path.join(os.path.expanduser("~"), '.shorelinetradingbot',  args.conf)
        tmpFile2 = os.path.join(os.path.dirname(
            utils.getPathOfThisFile()), 'shorelinetradingbot.conf')
     elif osname == 'Windows':
-       tmpFile1 = os.path.join(os.path.expandvars("%userprofile%"), 'AppData\Roaming\shorelinetradingbot','shorelinetradingbot.conf')
+       tmpFile1 = os.path.join(os.path.expandvars("%userprofile%"), 'AppData\Roaming\shorelinetradingbot',args.conf)
        tmpFile2 = os.path.join(os.path.dirname(
            utils.getPathOfThisFile()), 'shorelinetradingbot.conf')
     elif osname == 'Darwin':
-       tmpFile1 = os.path.join(os.path.expanduser("~"), 'Library/Application Support/shorelinetradingbot',  'shorelinetradingbot.conf')
+       tmpFile1 = os.path.join(os.path.expanduser("~"), 'Library/Application Support/shorelinetradingbot',  args.conf)
        tmpFile2 = os.path.join(os.path.dirname(
            utils.getPathOfThisFile()), 'shorelinetradingbot.conf')
     else:
