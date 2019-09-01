@@ -94,9 +94,24 @@ def main(args):
             config['apisecret'] = m2.group(1)
         
         m3 = re.search(
-            r'^strategy=(\d+)\s*$', line, re.M)
+            r'^strategy=(\S+)\s*$', line, re.M)
         if m3:
             config['strategy'] = m3.group(1)
+        
+        m4 = re.search(
+            r'^tradingpair=(\S+)\s*$', line, re.M)
+        if m4 :
+            config['tradingpair'] = m4.group(1)
+        
+        m5 = re.search(
+            r'^price=([\d\.]+)\s*$', line, re.M)
+        if m5:
+            config['price'] = float(m5.group(1))
+        
+        m6 = re.search(
+            r'^amount=([\d.]+)\s*(\S+)\s*$', line, re.M)
+        if m6:
+            config['amount'] = m6.group(1) +  m6.group(2)
         
     # window will crash on os.fync on read only file
     # a simple close
@@ -104,6 +119,8 @@ def main(args):
 
     assert config['apikey'] is not None, "apikey missing in config!"
     assert config['apisecret'] is not None, "rpcpassword missing in config!"
+    
+    print config
  
     print "Shoreline Trading Bot started!"
  
