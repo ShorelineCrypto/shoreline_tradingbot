@@ -140,7 +140,7 @@ def get_amount(pair, price, amount, symbol):
 
     return amount
    
-def gt_currency(pair):
+def get_currency(pair):
     m1 = re.search(
             r'^DOGE-(\S+)\s*$', pair, re.M)
     if m1 :
