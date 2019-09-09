@@ -111,7 +111,7 @@ def main(args):
         m6 = re.search(
             r'^amount=([\d.]+)\s*(\S+)\s*$', line, re.M)
         if m6:
-            config['amount'] = m6.group(1) +  m6.group(2)
+            config['amount'] = get_amount(config['tradingpair'],config['price'], float(m6.group(1)),  m6.group(2))
         
     # window will crash on os.fync on read only file
     # a simple close
@@ -130,6 +130,15 @@ def main(args):
         time.sleep(minutes)
 
 
+def get_amount(pair, price, amount, symbol):
+    if symbol == "DOGE":
+        amount = amount * 1.0 / price
+    elif (pair != ("DOGE-" + symbol)):
+        assert False, "Fatal, amount unit is unrecognized, tradingpair= {}, amount = {} ".format(pair, amount)
+
+    return amount
+
+    
 ################################################################################
 # Command Line executions - Argument Parsing.
 ################################################################################
