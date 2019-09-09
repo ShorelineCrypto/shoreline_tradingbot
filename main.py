@@ -22,6 +22,7 @@ import sys
 
 # Modules in this package.
 import tradingbot.utils as utils
+import tradingbot.tradingbot as tradingbot
 
 
 # Safety for cases when shebang is bypassed.
@@ -102,6 +103,7 @@ def main(args):
             r'^tradingpair=(\S+)\s*$', line, re.M)
         if m4 :
             config['tradingpair'] = m4.group(1)
+            config['currency'] = get_currency(config['tradingpair'])
         
         m5 = re.search(
             r'^price=([\d\.]+)\s*$', line, re.M)
@@ -125,7 +127,7 @@ def main(args):
     print "Shoreline Trading Bot started!"
  
     while True:
-        
+        tradingbot.place_trade(config)
         minutes = args.interval * 60
         time.sleep(minutes)
 
@@ -137,6 +139,15 @@ def get_amount(pair, price, amount, symbol):
         assert False, "Fatal, amount unit is unrecognized, tradingpair= {}, amount = {} ".format(pair, amount)
 
     return amount
+   
+def gt_currency(pair):
+    m1 = re.search(
+            r'^DOGE-(\S+)\s*$', pair, re.M)
+    if m1 :
+            return m1.group(1)
+    else:
+        assert False, "currency not found, maybe wrong tradingpair: {}".format(pair)
+        
 
     
 ################################################################################
