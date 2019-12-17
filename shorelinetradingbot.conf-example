@@ -1,6 +1,6 @@
 apikey=YourAccount_apikey
 apisecret=youraccount_apisecret
 strategy=sellonly
-tradingpair=NENG/DOGE
+tradingpair=MTC/DOGE
 price=0.006
-amount=100 MTC
+amount=10.1 DOGE 
