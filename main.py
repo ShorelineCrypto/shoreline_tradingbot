@@ -124,8 +124,11 @@ def main(args):
     
     print config
  
-    print "Shoreline Trading Bot started!"
- 
+    print ("Shoreline Trading Bot started!\n")
+    print("check deposit address")
+    tradingbot.check_depositaddr(config)
+    print("\n\n")
+    
     while True:
         tradingbot.place_trade(config)
         minutes = args.interval * 60
