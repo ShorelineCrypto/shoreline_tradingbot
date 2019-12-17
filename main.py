@@ -78,7 +78,8 @@ def main(args):
 
     # Loading configuration file
     configFile = open(BotConfigFile, 'rU')
-    config = dict([(k, None) for k in ['apikey', 'apisecret', 'strategy','tradingpair', 'price', 'amount']])
+    config = dict([(k, None) for k in ['apikey', 'apisecret', 'strategy','tradingpair', 'maincoin', 'currency', 'price', 'amount']])
+    config['maincoin'] = 'DOGE'
 
     # TODO: Properly Loading config from file
     for line in configFile:
@@ -113,7 +114,10 @@ def main(args):
         m6 = re.search(
             r'^amount=([\d.]+)\s*(\S+)\s*$', line, re.M)
         if m6:
-            config['amount'] = get_amount(config['tradingpair'],config['price'], float(m6.group(1)),  m6.group(2))
+            unit = m6.group(2)
+            if (unit != config['currency'] and unit != config['maincoin']):
+                assert False, "Fatal, amount unit is unknown, does not match trading pair {}".format(config['tradingpair']) 
+            config['amount'] = get_amount(config['maincoin'], config['currency'],config['price'], float(m6.group(1)),  m6.group(2))
         
     # window will crash on os.fync on read only file
     # a simple close
@@ -135,21 +139,31 @@ def main(args):
         time.sleep(minutes)
 
 
-def get_amount(pair, price, amount, symbol):
-    if symbol == "DOGE":
+def get_amount(maincoin, currency, price, amount, symbol):
+    if price == 0:
+        assert False, "Fatal, trading price can not be zero"
+
+    if symbol == maincoin:
         amount = amount * 1.0 / price
-    elif (pair != ("DOGE-" + symbol)):
-        assert False, "Fatal, amount unit is unrecognized, tradingpair= {}, amount = {} ".format(pair, amount)
+        print ("trading amount is converted into {} unit with amount = {}".format(currency, amount))
+    elif symbol == currency:
+        print ("trading {} amount in {} unit".format(amount,currency))
+    else:
+        assert False, "Fatal, amount unit is unrecognized, trading symbol= {}, amount = {} ".format(symbol, amount)
 
     return amount
    
 def get_currency(pair):
     m1 = re.search(
             r'^DOGE-(\S+)\s*$', pair, re.M)
+    m2 = re.search(
+        r'^(\S+)/DOGE\s*$', pair, re.M)
     if m1 :
             return m1.group(1)
+    elif m2:
+            return m2.group(1)
     else:
-        assert False, "currency not found, maybe wrong tradingpair: {}".format(pair)
+        assert False, "currency not found, maybe wrong tradingpair format: {}".format(pair)
         
 
     

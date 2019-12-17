@@ -11,7 +11,7 @@ ShorelineCrypto API interface will be used in this python code.
 
 ### NewEnglandcoin (NENG) will be Tested
 
-While the tradingbot is expected to work on all coins listed at ShorelineCrypto exchange, only NewEnglandcoin (NENG) on DOGE-NENG pair will be tested
+While the tradingbot is expected to work on all coins listed at ShorelineCrypto exchange, only NewEnglandcoin (NENG) on NENG/DOGE pair will be fully tested
 fully by dev. 
 
 ### How to run Shoreline TradingBot?
