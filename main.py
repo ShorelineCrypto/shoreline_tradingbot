@@ -99,6 +99,8 @@ def main(args):
             r'^strategy=(\S+)\s*$', line, re.M)
         if m3:
             config['strategy'] = m3.group(1)
+            if ((config['strategy'] != "buyonly") and (config['strategy'] != "sellonly") and (config['strategy'] != "buysell")):
+                assert False, "Fatal: wrong strategy: {}".format(config['strategy'])
         
         m4 = re.search(
             r'^tradingpair=(\S+)\s*$', line, re.M)
