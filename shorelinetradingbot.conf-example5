@@ -1,0 +1,7 @@
+apikey=YOUR_APIKEY
+apisecret=YOUR_APISECRET
+strategy=buysell
+tradingpair=MTC/DOGE
+buyprice=0.005
+sellprice=0.006
+amount=1 DOGE

@@ -1,6 +1,6 @@
 apikey=YourAccount_apikey
 apisecret=youraccount_apisecret
-strategy=sellonly
+strategy=buyonly
 tradingpair=MTC/DOGE
-price=0.006
-amount=10.1 DOGE 
+price=0.001
+amount=1000 MTC 

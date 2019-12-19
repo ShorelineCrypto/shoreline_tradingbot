@@ -106,20 +106,19 @@ def cancel_order(config, uuid):
    print(request.text)
 
    
-def place_trade(config):
-   clear_orders_all(config)
-   if (config['strategy'] == 'sellonly'):
+def place_trade(order):
+   if (order['strategy'] == 'sellonly'):
       apifunc = '/market/selllimit'
-   elif (config['strategy'] == 'buyonly'):
+   elif (order['strategy'] == 'buyonly'):
       apifunc = '/market/buylimit'
    else:
       assert False, "Fatal, only buyonly sellonly strategies supported"
-   currency = config['currency']
-   apikey = config['apikey']
-   apisecret = config['apisecret']
-   market = config['maincoin'] + '-' + config['currency']
-   quantity = str(config['amount'])
-   rate = str(config['price'])
+   currency = order['currency']
+   apikey = order['apikey']
+   apisecret = order['apisecret']
+   market = order['maincoin'] + '-' + order['currency']
+   quantity = str(order['amount'])
+   rate = str(order['price'])
 
    nonce =  str(int(time.time()))
    path =   '/api/v1' + apifunc + '?apikey=' +  apikey + '&nonce=' + nonce + '&market=' + market + '&quantity=' + quantity + '&rate=' + rate

@@ -1,0 +1,7 @@
+apikey=YOUR_APIKEY
+apisecret=YOUR_APISECRET
+strategy=buysell
+tradingpair=NENG/DOGE
+sellprice=0.0000195
+buyprice=0.0000166
+amount=1000 NENG

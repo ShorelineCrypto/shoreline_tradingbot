@@ -19,6 +19,7 @@ import platform
 import os.path
 import re
 import sys
+import copy
 
 # Modules in this package.
 import tradingbot.utils as utils
@@ -78,7 +79,10 @@ def main(args):
 
     # Loading configuration file
     configFile = open(BotConfigFile, 'rU')
-    config = dict([(k, None) for k in ['apikey', 'apisecret', 'strategy','tradingpair', 'maincoin', 'currency', 'price', 'amount']])
+    config = dict([(k, None) for k in ['apikey', 'apisecret', 'strategy','tradingpair', 'maincoin', 'currency', 'price', 'amount', 'amountnum', 'amountunit', 'buyprice','sellprice']])
+    buyorder = dict([(k, None) for k in ['apikey', 'apisecret', 'strategy','tradingpair', 'maincoin', 'currency', 'price', 'amount', 'amountnum', 'amountunit', 'buyprice','sellprice']])
+    sellorder = dict([(k, None) for k in ['apikey', 'apisecret', 'strategy','tradingpair', 'maincoin', 'currency', 'price', 'amount', 'amountnum', 'amountunit', 'buyprice','sellprice']])
+    
     config['maincoin'] = 'DOGE'
 
     # TODO: Properly Loading config from file
@@ -119,31 +123,64 @@ def main(args):
             unit = m6.group(2)
             if (unit != config['currency'] and unit != config['maincoin']):
                 assert False, "Fatal, amount unit is unknown, does not match trading pair {}".format(config['tradingpair']) 
-            config['amount'] = get_amount(config['maincoin'], config['currency'],config['price'], float(m6.group(1)),  m6.group(2))
-        
+            config['amountnum'] = float(m6.group(1))
+            config['amountunit'] = m6.group(2)
+            
+        m7 = re.search(
+            r'^buyprice=([\d\.]+)\s*$', line, re.M)
+        if m7:
+            config['buyprice'] = float(m7.group(1))
+        m8 = re.search(
+            r'^sellprice=([\d\.]+)\s*$', line, re.M)
+        if m8:
+            config['sellprice'] = float(m8.group(1))
+            
     # window will crash on os.fync on read only file
     # a simple close
     configFile.close()
 
     assert config['apikey'] is not None, "apikey missing in config!"
     assert config['apisecret'] is not None, "rpcpassword missing in config!"
-    
-    print config
+    print(config)
+    if config['strategy'] == 'buyonly':
+        buyorder = copy.deepcopy(config)
+        buyorder['amount'] = get_amount(config['maincoin'], config['currency'], config['price'], config['amountnum'],  config['amountunit'])
+    elif config['strategy'] == 'sellonly':
+        sellorder = copy.deepcopy(config)
+        sellorder['amount'] = get_amount(config['maincoin'], config['currency'], config['price'], config['amountnum'],  config['amountunit'])
+    elif config['strategy'] == 'buysell':
+        buyorder = copy.deepcopy(config)
+        buyorder['strategy'] = 'buyonly'
+        buyorder['price'] = config['buyprice']
+        buyorder['amount'] = get_amount(config['maincoin'], config['currency'], config['buyprice'], config['amountnum'],  config['amountunit'])
+
+        sellorder = copy.deepcopy(config)
+        sellorder['strategy'] = 'sellonly'
+        sellorder['price'] = config['sellprice']
+        sellorder['amount'] = get_amount(config['maincoin'], config['currency'], config['sellprice'], config['amountnum'],  config['amountunit'])
  
-    print ("Shoreline Trading Bot started!\n")
+    print ("\nShoreline Trading Bot started!\n")
     print("check deposit address")
     tradingbot.check_depositaddr(config)
     print("\n\n")
     
     while True:
-        tradingbot.place_trade(config)
-        minutes = args.interval * 60
-        time.sleep(minutes)
+        tradingbot.clear_orders_all(config)
+        if config['strategy'] == 'buyonly':
+            tradingbot.place_trade(buyorder)
+        elif config['strategy'] == 'sellonly':
+            tradingbot.place_trade(sellorder)
+        elif config['strategy'] == 'buysell':
+            tradingbot.place_trade(buyorder)
+            tradingbot.place_trade(sellorder)
+            
+        wait = args.interval * 60
+        time.sleep(wait)
 
 
 def get_amount(maincoin, currency, price, amount, symbol):
-    if price == 0:
-        assert False, "Fatal, trading price can not be zero"
+    if price == 0 or price is None:
+        assert False, "Fatal, trading price can not be zero or None"
 
     if symbol == maincoin:
         amount = amount * 1.0 / price

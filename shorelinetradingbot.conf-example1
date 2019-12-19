@@ -1,0 +1,6 @@
+apikey=YOUR_APIKEY
+apisecret=YOUR_APISECRET
+strategy=buyonly
+tradingpair=NENG/DOGE
+price=0.000025
+amount=1 DOGE
