@@ -19,7 +19,7 @@ While the tradingbot is expected to work on all coins listed at ShorelineCrypto 
 
  - Download v2.7.x version of windows python from https://www.python.org/downloads/windows/ and install it.
  - Open a window command prompt terminal, run below command to install the requests module 
-   ( https://github.com/jgarzik/python-bitcoinrpc )
+
 ```
      set PATH=C:\Python27;C:\Python27\Scripts;%PATH%
      pip install requests
