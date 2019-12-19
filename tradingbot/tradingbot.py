@@ -110,8 +110,10 @@ def place_trade(config):
    clear_orders_all(config)
    if (config['strategy'] == 'sellonly'):
       apifunc = '/market/selllimit'
+   elif (config['strategy'] == 'buyonly'):
+      apifunc = '/market/buylimit'
    else:
-      assert False, "Fatal, only sellonly supported"
+      assert False, "Fatal, only buyonly sellonly strategies supported"
    currency = config['currency']
    apikey = config['apikey']
    apisecret = config['apisecret']
