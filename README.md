@@ -27,7 +27,7 @@ While the tradingbot is expected to work on all coins listed at ShorelineCrypto 
      pip install requests
 ```
 
-MacOS or Linux
+## MacOS or Linux - How to Install
 
 python 2.7 typically is default at MacOs or Linux. Install requests if it is missing:
 
