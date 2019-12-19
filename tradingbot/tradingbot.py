@@ -29,8 +29,7 @@ def check_depositaddr(config):
 
    print(request.text)
    
-
-def clear_allorders(config):
+def clear_orders_prev(config):
    apifunc = '/market/getopenorders'
    apikey = config['apikey']
    apisecret = config['apisecret']
@@ -57,6 +56,34 @@ def clear_allorders(config):
    for myorder in out_dict['result']:
       if float(myorder['Price']) == config['price']:
            cancel_order(config, myorder['OrderUuid'])
+   
+           
+def clear_orders_all(config):
+   apifunc = '/market/getopenorders'
+   apikey = config['apikey']
+   apisecret = config['apisecret']
+   market = config['maincoin'] + '-' + config['currency']
+   nonce =  str(int(time.time()))
+   path =   '/api/v1' + apifunc + '?apikey=' +  apikey + '&nonce=' + nonce + '&market=' + market
+   uri = 'https://shorelinecrypto.com' + path
+   signature = hmac.new(apisecret, msg=uri, digestmod=hashlib.sha512).hexdigest()
+   
+   # print(uri)
+   # print(signature)
+   datadict = {'host': 'shorelinecrypto.com',
+            'path': path
+            }
+
+   headerdict = {'apisign':  signature}
+
+   request = requests.get(
+      url=uri, data=datadict, headers = headerdict)
+
+   
+   out_dict = json.loads(request.text)
+   # print(out_dict)
+   for myorder in out_dict['result']:
+      cancel_order(config, myorder['OrderUuid'])
 
 def cancel_order(config, uuid):
    apifunc = '/market/cancel'
@@ -80,7 +107,7 @@ def cancel_order(config, uuid):
 
    
 def place_trade(config):
-   clear_allorders(config)
+   clear_orders_all(config)
    if (config['strategy'] == 'sellonly'):
       apifunc = '/market/selllimit'
    else:
