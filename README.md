@@ -11,7 +11,7 @@ By default setting, the tradingbot will automatically cancell orders and re-init
 
 ShorelineCrypto API interface will be used in this python code. 
 
-### NewEnglandcoin (NENG) will be Tested
+### NewEnglandcoin (NENG) Fully Tested
 
 While the tradingbot is expected to work on all coins listed at ShorelineCrypto exchange, only NewEnglandcoin (NENG) on NENG/DOGE pair and Marinecoin (MTC) on MTC/DOGE pair were fully tested by dev on all three strategies. 
 
